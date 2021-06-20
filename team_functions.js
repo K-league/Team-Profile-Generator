@@ -30,7 +30,7 @@ const addManager = (callback) => {
         .prompt(getQuestions("Manager", {
             name: 'office_number',
             type: 'input',
-            message: 'What is the team manager\'s office number?',
+            message: 'What is the Manager\'s Office number?',
         }))
         .then((answers) => {
             let manager = new Manager(answers.name, answers.employee_id, answers.email, answers.officeNumber);
