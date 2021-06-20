@@ -46,14 +46,5 @@ module.exports = {
 }
 
 if (require.main === module) {
-    // addManager(buildTeam);
-    buildProfile([
-        new Manager("name","1", "manager@email.com", "555-555-5555"),
-        new Intern("2", "2", "2", "2"),
-        new Engineer("3", "3", "3", "3"),
-        new Engineer("3", "3", "3", "3"),
-        new Engineer("3", "3", "3", "3"),
-        new Engineer("3", "3", "3", "3"),
-        new Engineer("3", "3", "3", "3"),
-    ])
+    addManager(buildTeam);
 }

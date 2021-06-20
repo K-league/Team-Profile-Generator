@@ -42,4 +42,26 @@ describe("Test page template generation", () => {
             expect(card).toContain(`<a href="mailto:intern@email.com" class="card-link">intern@email.com</a>`);
         });
     });
+
+    describe("Test generate the page", () => {
+        const team = [
+            new Manager("manager", "01", "manager@email.com", "555-555-5555"),
+            new Intern("intern", "02", "intern@email.com", "UT"),
+            new Engineer("engineer", "03", "eng3@email.com", "git03"),
+            new Engineer("engineer", "04", "eng4@email.com", "git04"),
+            new Engineer("engineer", "05", "eng5@email.com", "git05"),
+            new Engineer("engineer", "06", "eng6@email.com", "git06"),
+            new Engineer("engineer", "07", "eng7@email.com", "git07")
+        ];
+        const page = pagetemp.generateHtml(team);
+        expect(page.slice(0, 15) === "<!DOCTYPE html>").toBeTruthy();//starts with html tag
+        expect(page).toContain(`<h1 class="display-4 center"><center>My team</center></h1>`);
+        expect(page).toContain(`manager@email.com`);
+        expect(page).toContain(`intern@email.com`);
+        expect(page).toContain("eng3@email.com");
+        expect(page).toContain("eng4@email.com");
+        expect(page).toContain("eng5@email.com");
+        expect(page).toContain("eng6@email.com");
+        expect(page).toContain("eng7@email.com");
+    })
 })
