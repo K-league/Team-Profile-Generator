@@ -16,7 +16,7 @@ const buildProfile = (team) => {
 }
 
 const buildTeam = (team) => {
-    inquirer
+    return inquirer
         .prompt({
             name: 'action',
             type: 'rawlist',
@@ -28,6 +28,7 @@ const buildTeam = (team) => {
             ],
         })
         .then((answers) => {
+            console.log(answers.action);
             if (answers.action == 'Add engineer') {
                 addEngineer(team, buildTeam);
             } else if (answers.action == 'Add intern') {

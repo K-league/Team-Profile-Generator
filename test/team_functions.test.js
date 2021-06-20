@@ -1,5 +1,4 @@
 const inquirer = require("inquirer");
-const index = require("../index");
 const Manager = require("../lib/Manager");
 jest.mock("inquirer");
 const {addEngineer, addIntern, addManager} = require("../team_functions");
