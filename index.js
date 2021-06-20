@@ -1,7 +1,5 @@
-const Engineer = require("./lib/Engineer")
-const Manager = require("./lib/Manager")
-const Intern = require("./lib/Intern")
 const inquirer = require("inquirer")
+const {addEngineer, addIntern, addManager} = require("./team_functions");
 const path = require("path")
 const fs = require("fs")
 
@@ -9,105 +7,15 @@ const OUTPUT_DIR = path.resolve(__dirname, "output")
 const outputPath = path.join(OUTPUT_DIR, "team.html")
 const render = require("./src/pagetemp.js")//render req page temp output to team.html
 
-let team = [];
 
-const getQuestions = (role, extraQuestion) => {
-    return [{
-        name: 'name',
-        type: 'input',
-        message: `What is the ${role}'s name?`,
-    },
-    {
-        name: 'employee_id',
-        type: 'input',
-        message: `What is the ${role}'s employee id?`,
-    },
-    {
-        name: 'email',
-        type: 'input',
-        message: `What is the ${role}'s email?`,
-    },
-        extraQuestion
-    ]
-}
-
-const startNewProfile = () => {
-    //I am prompted to enter the team manager’s name, employee ID, email address, and office number
-    inquirer
-        .prompt(getQuestions("Manager", {
-            name: 'office_number',
-            type: 'input',
-            message: 'What is the team manager\'s office number?',
-        }))
-        .then((answers) => {
-            let manager = new Manager(answers.name, answers.employee_id, answers.email, answers.officeNumber);
-            team.push(manager);
-            buildTeam();
-        })
-        .catch((error) => {
-            if (error.isTtyError) {
-                // Prompt couldn't be rendered in the current environment
-            } else {
-                console.log(error)
-                // Something else went wrong
-            }
-        });
-}
-
-const addEngineer = () => {
-    //I am prompted to enter the engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
-    inquirer
-        .prompt(getQuestions("Engineer", {
-            name: 'github',
-            type: 'input',
-            message: 'What is the Engineer\'s github?',
-        }))
-        .then((answers) => {
-            let engineer = new Engineer(answers.name, answers.employee_id, answers.email, answers.github);
-            team.push(engineer);
-            buildTeam();
-        })
-        .catch((error) => {
-            if (error.isTtyError) {
-                // Prompt couldn't be rendered in the current environment
-            } else {
-                console.log(error)
-                // Something else went wrong
-            }
-        });
-}
-
-const addIntern = () => {
-    //I am prompted to enter the engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
-    inquirer
-        .prompt(getQuestions("Intern", {
-            name: 'school',
-            type: 'input',
-            message: 'What is the intern\'s school?',
-        }))
-        .then((answers) => {
-            let intern = new Intern(answers.name, answers.employee_id, answers.email, answers.school);
-            team.push(intern);
-            buildTeam();
-        })
-        .catch((error) => {
-            if (error.isTtyError) {
-                // Prompt couldn't be rendered in the current environment
-            } else {
-                console.log(error)
-                // Something else went wrong
-            }
-        });
-}
-
-const buildProfile = () => {
+const buildProfile = (team) => {
     team.forEach((employee) => {
         console.log(employee.render());
     })
     process.exit()
 }
 
-const buildTeam = () => {
+const buildTeam = (team) => {
     inquirer
         .prompt({
             name: 'action',
@@ -121,13 +29,20 @@ const buildTeam = () => {
         })
         .then((answers) => {
             if (answers.action == 'Add engineer') {
-                addEngineer();
+                addEngineer(team, buildTeam);
             } else if (answers.action == 'Add intern') {
-                addIntern();
+                addIntern(team, buildTeam);
             } else {
                 buildProfile(team);
             }
         });
 }
 
-startNewProfile();
+module.exports = {
+    buildProfile,
+    buildTeam
+}
+
+if (require.main === module) {
+    addManager(buildTeam);
+}
